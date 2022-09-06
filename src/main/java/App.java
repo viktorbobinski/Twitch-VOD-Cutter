@@ -1,6 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class App {
 
@@ -9,12 +8,20 @@ public class App {
                 "C:\\Users\\shiva\\Desktop\\test.txt");
         BufferedReader br
                 = new BufferedReader(new FileReader(file));
+
         String chatEntryString;
         List<ChatEntry> chatEntries = new ArrayList<>();
         while ((chatEntryString = br.readLine()) != null) {
             chatEntries.add(new ChatEntry(chatEntryString));
         }
 
-        chatEntries.forEach(System.out::println);
+        Segmenter segmenter = new Segmenter();
+        SegmentHelper helper = new SegmentHelper();
+        List<Segment> segments = segmenter.segmentChat(chatEntries);
+
+        segments.sort(helper.comparator());
+
+        Printer printer = new Printer();
+        printer.printToFile(segments);
     }
 }
